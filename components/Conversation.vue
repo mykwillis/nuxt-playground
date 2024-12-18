@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useConversationStore } from "../store/conversation.store";
+import { useWorkingConversationStore } from "../store/badConversation.store";
 
-const conversationStore = useConversationStore();
+// const conversationStore = useConversationStore();
+// const { conversation } = storeToRefs(useConversationStore());
+
+// const conversationStore = useBadConversationStore();
+// const conversationStore = useWorkingConversationStore();
+const { messages } = storeToRefs(useWorkingConversationStore());
 
 const newMessage = ref("");
 const sendMessage = () => {
-  conversationStore.messages.push({
-    id: conversationStore.messages.length,
+  messages.value.push({
+    id: messages.value.length,
     text: newMessage.value,
   });
   newMessage.value = "";
@@ -17,13 +22,13 @@ const sendMessage = () => {
 <template>
   <div>
     <h1>Conversation</h1>
-    <ClientOnly fallback="Loading...">
-      <ul>
-        <li v-for="message in conversationStore.messages" :key="message.id">
-          {{ message.text }}
-        </li>
-      </ul>
-    </ClientOnly>
+    <!-- <ClientOnly fallback="Loading..."> -->
+    <ul>
+      <li v-for="message in messages" :key="message.id">
+        {{ message.text }}
+      </li>
+    </ul>
+    <!-- </ClientOnly> -->
     <input v-model="newMessage" @keyup.enter="sendMessage" />
   </div>
 </template>
